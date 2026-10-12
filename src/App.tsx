@@ -1,12 +1,38 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
-  Search, Eye, Shield, Sparkles, X, Check, ArrowRight, RefreshCw, 
-  Trash2, Heart, Bookmark, Share2, Layers, AlertCircle, HelpCircle, 
-  BarChart3, Settings, Info, ExternalLink, SlidersHorizontal, ChevronRight, Zap,
-  PlayCircle, Compass, Target, Navigation
+  Search, Eye, Shield, Sparkles, X, Check, 
+  Trash2, AlertCircle, BarChart3, Info, ChevronRight, Zap,
+  Compass, Target
 } from 'lucide-react';
 
-const INITIAL_PINS = [
+interface Pin {
+  id: string;
+  title: string;
+  category: string;
+  author: string;
+  image: string;
+  aspect?: string;
+  tags?: string[];
+  likes?: string;
+}
+
+interface RelatedPin {
+  id: string;
+  title: string;
+  category: string;
+  author: string;
+  image: string;
+  aspect: string;
+}
+
+interface LogEntry {
+  id: number;
+  text: string;
+  type: string;
+  timestamp: string;
+}
+
+const INITIAL_PINS: Pin[] = [
   {
     id: 'pin-1',
     title: 'Mid-Century Modern Living Room Aesthetics',
@@ -69,7 +95,7 @@ const INITIAL_PINS = [
   }
 ];
 
-const RELATED_PINS_POOL = [
+const RELATED_PINS_POOL: RelatedPin[] = [
   {
     id: 'rel-1',
     title: 'Warm Wooden Accents & Planters',
@@ -160,34 +186,34 @@ const ANCHORED_TOUR_STEPS = [
 ];
 
 export default function App() {
-  const [globalPeekMode, setGlobalPeekMode] = useState(false);
-  const [selectedPin, setSelectedPin] = useState(null);
-  const [activeModalMode, setActiveModalMode] = useState(null); // 'standard' | 'peek'
-  const [searchQuery, setSearchQuery] = useState('');
-  const [activeTab, setActiveTab] = useState('All');
-  const [showTelemetry, setShowTelemetry] = useState(true);
-  const [isTelemetryCollapsed, setIsTelemetryCollapsed] = useState(false);
+  const [globalPeekMode, setGlobalPeekMode] = useState<boolean>(false);
+  const [selectedPin, setSelectedPin] = useState<Pin | null>(null);
+  const [activeModalMode, setActiveModalMode] = useState<'standard' | 'peek' | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [activeTab, setActiveTab] = useState<string>('All');
+  const [showTelemetry, setShowTelemetry] = useState<boolean>(true);
+  const [isTelemetryCollapsed, setIsTelemetryCollapsed] = useState<boolean>(false);
 
   // Guided Tour State
-  const [showTour, setShowTour] = useState(true);
-  const [tourStepIndex, setTourStepIndex] = useState(0);
+  const [showTour, setShowTour] = useState<boolean>(true);
+  const [tourStepIndex, setTourStepIndex] = useState<number>(0);
 
-  const [telemetryLogs, setTelemetryLogs] = useState([
+  const [telemetryLogs, setTelemetryLogs] = useState<LogEntry[]>([
     { id: 1, text: 'System initialized. Feed protection active.', type: 'system', timestamp: '10:00 AM' }
   ]);
 
-  const [peekSessionCount, setPeekSessionCount] = useState(0);
-  const [preventedDistortions, setPreventedDistortions] = useState(0);
+  const [peekSessionCount, setPeekSessionCount] = useState<number>(0);
+  const [preventedDistortions, setPreventedDistortions] = useState<number>(0);
 
   // Gesture refs & state
-  const longPressTimerRef = useRef(null);
-  const isHoldCompletedRef = useRef(false);
-  const [pressingPinId, setPressingPinId] = useState(null);
-  const [holdProgress, setHoldProgress] = useState(0);
-  const progressAnimRef = useRef(null);
-  const eventLogContainerRef = useRef(null);
+  const longPressTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const isHoldCompletedRef = useRef<boolean>(false);
+  const [pressingPinId, setPressingPinId] = useState<string | null>(null);
+  const [holdProgress, setHoldProgress] = useState<number>(0);
+  const progressAnimRef = useRef<number | null>(null);
+  const eventLogContainerRef = useRef<HTMLDivElement | null>(null);
 
-  const addLog = (text, type = 'standard') => {
+  const addLog = (text: string, type: string = 'standard') => {
     const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
     setTelemetryLogs(prev => [
       { id: Date.now(), text, type, timestamp: time },
@@ -201,13 +227,13 @@ export default function App() {
     }
   }, [telemetryLogs]);
 
-  const handleStandardClick = (pin) => {
+  const handleStandardClick = (pin: Pin) => {
     setSelectedPin(pin);
     setActiveModalMode('standard');
     addLog(`STANDARD TAP: Indexed "${pin.category}" into feed algorithm.`, 'standard');
   };
 
-  const handlePeekClick = (pin) => {
+  const handlePeekClick = (pin: Pin) => {
     setSelectedPin(pin);
     setActiveModalMode('peek');
     setPeekSessionCount(prev => prev + 1);
@@ -218,8 +244,7 @@ export default function App() {
     }
   };
 
-  // Unified Single Click Handler for Full Card (Image + Text)
-  const handleCardSingleClick = (pin, e) => {
+  const handleCardSingleClick = (pin: Pin) => {
     if (isHoldCompletedRef.current) {
       isHoldCompletedRef.current = false;
       return;
@@ -232,7 +257,7 @@ export default function App() {
     }
   };
 
-  const startHoldGesture = (pin) => {
+  const startHoldGesture = (pin: Pin) => {
     isHoldCompletedRef.current = false;
     setPressingPinId(pin.id);
     setHoldProgress(0);
@@ -295,7 +320,7 @@ export default function App() {
   const filteredPins = INITIAL_PINS.filter(pin => {
     const matchesCategory = activeTab === 'All' || pin.category === activeTab;
     const matchesSearch = pin.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          pin.tags.some(t => t.toLowerCase().includes(searchQuery.toLowerCase()));
+                          (pin.tags && pin.tags.some(t => t.toLowerCase().includes(searchQuery.toLowerCase())));
     return matchesCategory && matchesSearch;
   });
 
@@ -430,11 +455,8 @@ export default function App() {
                   key={pin.id}
                   id={isTourTargetPin ? 'tour-pin-card' : undefined}
                   
-                  /* Touch & Mouse Hold Gesture Listeners */
                   onTouchStart={() => startHoldGesture(pin)}
-                  onTouchEnd={(e) => {
-                    cancelHoldGesture();
-                  }}
+                  onTouchEnd={() => cancelHoldGesture()}
                   onTouchCancel={cancelHoldGesture}
 
                   onMouseDown={(e) => {
@@ -444,8 +466,7 @@ export default function App() {
                   onMouseLeave={cancelHoldGesture}
                   onContextMenu={(e) => e.preventDefault()}
 
-                  /* Unified Short Click Listener (Triggers on both Image and Text) */
-                  onClick={(e) => handleCardSingleClick(pin, e)}
+                  onClick={() => handleCardSingleClick(pin)}
 
                   className={`group relative break-inside-avoid rounded-3xl overflow-hidden bg-white border border-slate-200/80 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1 ${
                     isPressing ? 'ring-4 ring-emerald-500/60 scale-[0.98]' : ''
@@ -453,7 +474,7 @@ export default function App() {
                     showTour && tourStepIndex === 0 && isTourTargetPin ? 'ring-4 ring-red-500 shadow-2xl z-20' : ''
                   }`}
                 >
-                  <div className={`relative w-full ${pin.aspect} overflow-hidden bg-slate-100`}>
+                  <div className={`relative w-full ${pin.aspect || 'aspect-[3/4]'} overflow-hidden bg-slate-100`}>
                     <img
                       src={pin.image}
                       alt={pin.title}
@@ -750,7 +771,7 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* Exit Peek & Train Feed Controls (Desktop & Tablet normal flow) */}
+                {/* Exit Peek & Train Feed Controls */}
                 <div 
                   id="tour-commit-actions"
                   className={`pt-4 border-t border-slate-200 space-y-2 hidden md:block ${
@@ -819,7 +840,7 @@ export default function App() {
 
             </div>
 
-            {/* Mobile Sticky Bottom Action Bar ("Exit Peek" & "Train Feed") */}
+            {/* Mobile Sticky Bottom Action Bar */}
             <div className="md:hidden absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 p-3 shadow-2xl z-30 flex flex-col gap-2">
               <div className="flex items-center gap-2">
                 <button
