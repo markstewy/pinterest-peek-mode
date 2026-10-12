@@ -1,6 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.pin-card, img {
+  -webkit-touch-callout: none; /* Disables iOS Safari long-press menu */
+  -webkit-user-select: none;   /* Disables Safari text selection */
+  user-select: none;           /* Standard user selection block */
+  -webkit-user-drag: none;     /* Prevents Android Chrome from dragging images */
+}
 /* 
 :root {
   --text: #6b6375;

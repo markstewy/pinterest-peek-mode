@@ -277,7 +277,7 @@ export default function App() {
 
     progressAnimRef.current = requestAnimationFrame(updateProgress);
 
-    longPressTimerRef.current = setTimeout(() => {
+    longPressTimerRef.current = window.setTimeout(() => {
       isHoldCompletedRef.current = true;
       handlePeekClick(pin);
       cancelHoldGesture();
@@ -285,11 +285,11 @@ export default function App() {
   };
 
   const cancelHoldGesture = () => {
-    if (longPressTimerRef.current) {
+    if (longPressTimerRef.current !== null) {
       clearTimeout(longPressTimerRef.current);
       longPressTimerRef.current = null;
     }
-    if (progressAnimRef.current) {
+    if (progressAnimRef.current !== null) {
       cancelAnimationFrame(progressAnimRef.current);
       progressAnimRef.current = null;
     }
@@ -455,6 +455,9 @@ export default function App() {
                   key={pin.id}
                   id={isTourTargetPin ? 'tour-pin-card' : undefined}
                   
+                  /* Mobile Long-Press / Context Menu Preventions across Safari, Chrome, Samsung */
+                  onContextMenu={(e) => e.preventDefault()}
+                  
                   onTouchStart={() => startHoldGesture(pin)}
                   onTouchEnd={() => cancelHoldGesture()}
                   onTouchCancel={cancelHoldGesture}
@@ -464,11 +467,10 @@ export default function App() {
                   }}
                   onMouseUp={cancelHoldGesture}
                   onMouseLeave={cancelHoldGesture}
-                  onContextMenu={(e) => e.preventDefault()}
 
                   onClick={() => handleCardSingleClick(pin)}
 
-                  className={`group relative break-inside-avoid rounded-3xl overflow-hidden bg-white border border-slate-200/80 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1 ${
+                  className={`group relative break-inside-avoid rounded-3xl overflow-hidden bg-white border border-slate-200/80 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1 touch-none select-none [webkit-touch-callout:none] ${
                     isPressing ? 'ring-4 ring-emerald-500/60 scale-[0.98]' : ''
                   } ${
                     showTour && tourStepIndex === 0 && isTourTargetPin ? 'ring-4 ring-red-500 shadow-2xl z-20' : ''
@@ -478,7 +480,7 @@ export default function App() {
                     <img
                       src={pin.image}
                       alt={pin.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 pointer-events-none [webkit-touch-callout:none]"
                       loading="lazy"
                     />
 
@@ -745,7 +747,7 @@ export default function App() {
                     <img
                       src={selectedPin.image}
                       alt={selectedPin.title}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover pointer-events-none"
                     />
                   </div>
 
@@ -817,13 +819,13 @@ export default function App() {
                     <div 
                       key={rel.id} 
                       onClick={() => addLog(`PEEK INTERACTION: Viewed related recommendation "${rel.title}". Session remains isolated.`, 'peek')}
-                      className="group relative break-inside-avoid rounded-2xl overflow-hidden bg-white border border-slate-200 shadow-sm hover:shadow-md transition-all cursor-pointer"
+                      className="group relative break-inside-avoid rounded-2xl overflow-hidden bg-white border border-slate-200 shadow-sm hover:shadow-md transition-all cursor-pointer select-none [webkit-touch-callout:none]"
                     >
                       <div className={`relative w-full ${rel.aspect} bg-slate-200 overflow-hidden`}>
                         <img 
                           src={rel.image} 
                           alt={rel.title} 
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 pointer-events-none" 
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 group-hover:opacity-100 transition-opacity p-2.5 flex items-end">
                           <p className="text-[10px] text-white font-medium leading-tight line-clamp-2">{rel.title}</p>
@@ -898,7 +900,7 @@ export default function App() {
                     <img
                       src={selectedPin.image}
                       alt={selectedPin.title}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover pointer-events-none"
                     />
                   </div>
 
@@ -950,13 +952,13 @@ export default function App() {
                   {RELATED_PINS_POOL.map(rel => (
                     <div 
                       key={rel.id} 
-                      className="group relative break-inside-avoid rounded-2xl overflow-hidden bg-white border border-slate-200 shadow-sm"
+                      className="group relative break-inside-avoid rounded-2xl overflow-hidden bg-white border border-slate-200 shadow-sm select-none [webkit-touch-callout:none]"
                     >
                       <div className={`relative w-full ${rel.aspect} bg-slate-200 overflow-hidden`}>
                         <img 
                           src={rel.image} 
                           alt={rel.title} 
-                          className="w-full h-full object-cover" 
+                          className="w-full h-full object-cover pointer-events-none" 
                         />
                       </div>
                       <div className="p-2.5">
