@@ -556,7 +556,7 @@ export default function App() {
           >
             {/* Panel Header */}
             <div 
-              className="p-3.5 border-b border-slate-100 flex items-center justify-between bg-slate-900 text-white cursor-pointer md:cursor-default select-none"
+              className="p-3.5 border-b border-slate-100 flex items-center justify-between bg-slate-900 text-white cursor-pointer md:cursor-default select-none shrink-0"
               onClick={() => {
                 if (window.innerWidth < 768) {
                   setIsTelemetryCollapsed(!isTelemetryCollapsed);
@@ -582,7 +582,7 @@ export default function App() {
 
             {/* Collapsible Body Wrapper */}
             <div className={`flex-1 flex flex-col overflow-hidden transition-all ${isTelemetryCollapsed ? 'hidden md:flex' : 'flex'}`}>
-              <div className="p-3 border-b border-slate-100 bg-slate-50 grid grid-cols-2 gap-2">
+              <div className="p-3 border-b border-slate-100 bg-slate-50 grid grid-cols-2 gap-2 shrink-0">
                 <div className="bg-white p-2.5 rounded-xl border border-slate-200/80 shadow-sm">
                   <span className="text-[9px] font-bold uppercase text-slate-400 tracking-wider">Peek Sessions</span>
                   <p className="text-lg font-black text-emerald-600">{peekSessionCount}</p>
@@ -593,9 +593,9 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Independent Scroll Console Log Container */}
-              <div className="p-3 bg-slate-900 text-slate-200 flex-1 flex flex-col justify-between">
-                <div className="flex items-center justify-between mb-1.5">
+              {/* Independent Scroll Console Log Container with Dynamic Flex Height */}
+              <div className="p-3 bg-slate-900 text-slate-200 flex-1 flex flex-col justify-between overflow-hidden">
+                <div className="flex items-center justify-between mb-1.5 shrink-0">
                   <span className="text-xs font-bold text-slate-400 flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
                     Live Activity Stream
@@ -605,7 +605,7 @@ export default function App() {
 
                 <div 
                   ref={eventLogContainerRef}
-                  className="max-h-40 md:max-h-56 h-40 md:h-56 overflow-y-auto space-y-1.5 pr-1 font-mono text-[10px] no-scrollbar scroll-smooth"
+                  className="flex-1 min-h-[160px] md:min-h-[260px] overflow-y-auto space-y-1.5 pr-1 font-mono text-[10px] no-scrollbar scroll-smooth"
                 >
                   {telemetryLogs.map(log => (
                     <div 
