@@ -455,7 +455,7 @@ export default function App() {
                   key={pin.id}
                   id={isTourTargetPin ? 'tour-pin-card' : undefined}
                   
-                  /* Mobile Long-Press / Context Menu Preventions across Safari, Chrome, Samsung */
+                  /* Mobile Context Menu Preventions across Safari, Chrome, Samsung */
                   onContextMenu={(e) => e.preventDefault()}
                   
                   onTouchStart={() => startHoldGesture(pin)}
@@ -470,7 +470,8 @@ export default function App() {
 
                   onClick={() => handleCardSingleClick(pin)}
 
-                  className={`group relative break-inside-avoid rounded-3xl overflow-hidden bg-white border border-slate-200/80 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1 touch-none select-none [webkit-touch-callout:none] ${
+                  /* Using touch-pan-y allows normal vertical page scrolling while preserving gestures & menu suppression */
+                  className={`group relative break-inside-avoid rounded-3xl overflow-hidden bg-white border border-slate-200/80 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1 touch-pan-y select-none [webkit-touch-callout:none] ${
                     isPressing ? 'ring-4 ring-emerald-500/60 scale-[0.98]' : ''
                   } ${
                     showTour && tourStepIndex === 0 && isTourTargetPin ? 'ring-4 ring-red-500 shadow-2xl z-20' : ''
