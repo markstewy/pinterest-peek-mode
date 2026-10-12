@@ -150,19 +150,19 @@ const ANCHORED_TOUR_STEPS = [
   {
     step: 1,
     targetId: 'tour-pin-card',
-    title: '1. Short Click vs. Long-Press Hold',
+    title: '1. Curious about a pin? Preview it without regret.',
     icon: Eye,
     position: 'bottom-right',
-    description: 'Click any Pin (image or text) for standard view. When Peek Mode is ON, short clicks open an isolated Peek Session. Or hold 0.5s anytime for radial long-press previewing!',
-    actionHint: 'Click card image/text or hold 0.5s'
+    description: 'We’ve all searched for one quick idea only to have Pinterest spam our home feed with it for weeks. Peek Mode lets you inspect pins in total isolation!',
+    actionHint: 'Hold 0.5s or click with Peek ON'
   },
   {
     step: 2,
     targetId: 'tour-header-toggle',
-    title: '2. Global Peek Mode Toggle',
+    title: '2. Peek Mode',
     icon: Shield,
     position: 'bottom-left',
-    description: 'Toggle Peek Mode ON to isolate all standard clicks automatically without polluting your home feed recommendations.',
+    description: 'Toggle Peek Mode ON to make every single click safe. Explore freely without letting "drive-by" browsing pollute your personal algorithm recommendations.',
     actionHint: 'Toggles platform-wide insulation'
   },
   {
@@ -171,7 +171,7 @@ const ANCHORED_TOUR_STEPS = [
     title: '3. Real-Time Telemetry Log',
     icon: BarChart3,
     position: 'left-center',
-    description: 'Watch your feed protection statistics and live event stream update in real time with an independent scroll window.',
+    description: 'Watch the live telemetry panel track your active sessions and count exactly how many unwanted feed distortions you’ve successfully blocked in real time.',
     actionHint: 'Tracks feed pollution prevented'
   },
   {
@@ -180,7 +180,7 @@ const ANCHORED_TOUR_STEPS = [
     title: '4. Exit Peek vs. Train Feed Control',
     icon: Target,
     position: 'top-center',
-    description: 'Inside Peek Mode, you choose: "Train Feed" updates your algorithm, or "Exit Peek" closes out without affecting your recommendations.',
+    description: 'Inside a Peek session, browse related ideas safely. Click "Train Feed" if you actually want it in your algorithm, or "Exit Peek" to walk away leaving your feed untouched.',
     actionHint: 'Explicit user control over feed algorithm'
   }
 ];
