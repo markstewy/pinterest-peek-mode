@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   Search, Eye, Shield, Sparkles, X, Check, 
-  Trash2, AlertCircle, BarChart3, Info, ChevronRight, Zap,
+  AlertCircle, BarChart3, Info, ChevronRight, Zap,
   Compass, Target
 } from 'lucide-react';
 
@@ -206,7 +206,7 @@ export default function App() {
   const [preventedDistortions, setPreventedDistortions] = useState<number>(0);
 
   // Gesture refs & state
-  const longPressTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const longPressTimerRef = useRef<number | null>(null);
   const isHoldCompletedRef = useRef<boolean>(false);
   const [pressingPinId, setPressingPinId] = useState<string | null>(null);
   const [holdProgress, setHoldProgress] = useState<number>(0);
