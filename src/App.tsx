@@ -455,7 +455,6 @@ export default function App() {
                   key={pin.id}
                   id={isTourTargetPin ? 'tour-pin-card' : undefined}
                   
-                  /* Mobile Context Menu Preventions across Safari, Chrome, Samsung */
                   onContextMenu={(e) => e.preventDefault()}
                   
                   onTouchStart={() => startHoldGesture(pin)}
@@ -470,7 +469,6 @@ export default function App() {
 
                   onClick={() => handleCardSingleClick(pin)}
 
-                  /* Using touch-pan-y allows normal vertical page scrolling while preserving gestures & menu suppression */
                   className={`group relative break-inside-avoid rounded-3xl overflow-hidden bg-white border border-slate-200/80 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1 touch-pan-y select-none [webkit-touch-callout:none] ${
                     isPressing ? 'ring-4 ring-emerald-500/60 scale-[0.98]' : ''
                   } ${
@@ -566,18 +564,19 @@ export default function App() {
               <div className="flex items-center gap-2">
                 <BarChart3 className="w-4 h-4 text-emerald-400" />
                 <h3 className="font-bold text-xs tracking-wide">Algorithm Protection Log</h3>
-                <span className="text-[10px] bg-slate-800 text-emerald-300 px-2 py-0.5 rounded-full font-mono md:hidden">
-                  {isTelemetryCollapsed ? '▲ Tap to Expand' : '▼ Tap to Minimize'}
-                </span>
               </div>
-              <div className="flex items-center">
-                <span 
-                  onClick={() => setIsTelemetryCollapsed(!isTelemetryCollapsed)}
-                  className="text-xs font-semibold px-2 text-slate-300 hover:text-white md:hidden cursor-pointer"
-                >
-                  {isTelemetryCollapsed ? 'Expand' : 'Collapse'}
-                </span>
-              </div>
+
+              {/* Single Clean Mobile Toggle Button */}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsTelemetryCollapsed(!isTelemetryCollapsed);
+                }}
+                className="text-[10px] bg-slate-800 hover:bg-slate-700 text-emerald-300 font-mono px-2.5 py-1 rounded-full border border-slate-700 md:hidden transition-colors"
+              >
+                {isTelemetryCollapsed ? '▲ Expand' : '▼ Collapse'}
+              </button>
             </div>
 
             {/* Collapsible Body Wrapper */}
